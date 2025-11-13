@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jackson Physician Search + Outreach Business Case</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-dark: #120044;
+            --primary-darker: #030268;
+            --primary: #3028a1;
+            --primary-light: #5951ff;
+            --primary-lighter: #7a7fff;
+            --primary-lightest: #b3b0ff;
+            --primary-pale: #cdcbff;
+            --primary-faint: #f0f0ff;
+            --neutral-warm: #dcd7bf;
+            --neutral-light: #edeadd;
+            --neutral-lighter: #f7f5f2;
+            --text-dark: #1f1f1f;
+            --text-medium: #575757;
+            --text-light: #9d9d9d;
+            --gray-light: #d7d7d7;
+            --gray-lighter: #e6e6e6;
+            --gray-lightest: #f2f2f2;
+            --white-soft: #fbfbfb;
+            --white: #ffffff;
+            --warning: #ff6b35;
+            --success: #4caf50;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background: var(--white);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            color: var(--white);
+            text-align: center;
+            padding: 40px 20px;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+
+        /* Navigation Tabs */
+        .nav-tabs {
+            display: flex;
+            background: var(--white);
+            border-radius: 12px;
+            padding: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            overflow-x: auto;
+        }
+
+        .nav-tab {
+            flex: 1;
+            padding: 15px 20px;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            color: var(--text-medium);
+            position: relative;
+            min-width: 150px;
+        }
+
+        .nav-tab.active {
+            background: var(--primary);
+            color: var(--white);
+            box-shadow: 0 2px 8px rgba(48, 40, 161, 0.3);
+        }
+
+        .nav-tab:hover:not(.active) {
+            background: var(--primary-faint);
+            color: var(--primary);
+        }
+
+        .nav-tab .tab-number {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--gray-lighter);
+            color: var(--text-medium);
+            line-height: 24px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-right: 8px;
+        }
+
+        .nav-tab.active .tab-number {
+            background: var(--white);
+            color: var(--primary);
+        }
+
+        /* Content Sections */
+        .content-section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Cards */
+        .card {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border-left: 4px solid var(--primary);
+        }
+
+        .card h2 {
+            color: var(--primary-dark);
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .card h3 {
+            color: var(--primary);
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            margin-top: 20px;
+        }
+
+        .card h4 {
+            color: var(--primary-dark);
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            margin-top: 15px;
+        }
+
+        .card p {
+            margin-bottom: 15px;
+            line-height: 1.7;
+        }
+
+        .card ul, .card ol {
+            margin: 15px 0 15px 20px;
+            line-height: 1.8;
+        }
+
+        .card li {
+            margin-bottom: 8px;
+        }
+
+        /* Highlight Boxes */
+        .highlight-box {
+            background: var(--primary-faint);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid var(--primary);
+        }
+
+        .highlight-box.warning {
+            background: #fff4e6;
+            border-left-color: var(--warning);
+        }
+
+        .highlight-box.success {
+            background: #e8f5e9;
+            border-left-color: var(--success);
+        }
+
+        .highlight-box h3, .highlight-box h4 {
+            margin-top: 0;
+        }
+
+        /* Quote Boxes */
+        .quote-box {
+            background: var(--gray-lightest);
+            padding: 15px 20px;
+            border-left: 3px solid var(--primary);
+            border-radius: 6px;
+            margin: 15px 0;
+            font-style: italic;
+        }
+
+        .quote-box .quote-author {
+            display: block;
+            margin-top: 8px;
+            font-style: normal;
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 14px;
+        }
+
+        /* Stakeholder Accordion */
+        .stakeholder-accordion {
+            margin: 20px 0;
+        }
+
+        .stakeholder-item {
+            background: var(--white);
+            border-radius: 10px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            overflow: hidden;
+        }
+
+        .stakeholder-header {
+            padding: 20px;
+            cursor: pointer;
+            background: var(--primary-faint);
+            border-left: 4px solid var(--primary);
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .stakeholder-header:hover {
+            background: var(--primary-pale);
+        }
+
+        .stakeholder-header.active {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .stakeholder-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .stakeholder-role {
+            font-size: 14px;
+            opacity: 0.8;
+            margin-top: 4px;
+        }
+
+        .stakeholder-content {
+            padding: 0 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .stakeholder-content.active {
+            padding: 20px;
+            max-height: 3000px;
+        }
+
+        .toggle-icon {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        /* Theme Boxes */
+        .theme-boxes {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .theme-box {
+            background: var(--white);
+            border: 2px solid var(--primary-pale);
+            border-radius: 8px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            position: relative;
+        }
+
+        .theme-box:hover {
+            border-color: var(--primary);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .theme-box.active {
+            border-color: var(--primary);
+            background: var(--primary-faint);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .theme-box h4 {
+            margin: 0 0 8px 0;
+            color: var(--primary);
+            font-size: 16px;
+        }
+
+        .theme-box p {
+            margin: 0;
+            font-size: 14px;
+            color: var(--text-medium);
+        }
+
+        .theme-content {
+            margin: 20px 0;
+        }
+
+        .theme-detail {
+            display: none;
+        }
+
+        .theme-detail.active {
+            display: block;
+        }
+
+        /* State Comparison Boxes */
+        .state-comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .state-box {
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .state-box.current {
+            background: #ffebee;
+            border-left: 4px solid #d32f2f;
+        }
+
+        .state-box.future {
+            background: #e8f5e9;
+            border-left: 4px solid #388e3c;
+        }
+
+        .state-box h4 {
+            margin-top: 0;
+        }
+
+        /* Gap List */
+        .gap-list {
+            margin: 20px 0;
+        }
+
+        .gap-item {
+            background: var(--gray-lightest);
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 3px solid var(--warning);
+        }
+
+        .gap-item strong {
+            color: var(--warning);
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        /* Solution List */
+        .solution-list {
+            margin: 20px 0;
+        }
+
+        .solution-item {
+            background: var(--primary-faint);
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 3px solid var(--primary);
+        }
+
+        .solution-item strong {
+            color: var(--primary);
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        /* Impact Metrics */
+        .impact-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .impact-card {
+            background: linear-gradient(135deg, var(--primary-faint), var(--white));
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid var(--primary-pale);
+        }
+
+        .impact-icon {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .impact-label {
+            font-size: 14px;
+            color: var(--text-medium);
+            font-weight: 500;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-tabs {
+                flex-direction: column;
+            }
+            
+            .nav-tab {
+                margin-bottom: 5px;
+            }
+            
+            .state-comparison {
+                grid-template-columns: 1fr;
+            }
+            
+            .theme-boxes {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>JACKSON PHYSICIAN SEARCH + OUTREACH BUSINESS CASE</h1>
+        <p>Consultative Sales Process Analysis</p>
+    </div>
+
+    <div class="container">
+        <!-- Navigation Tabs -->
+        <div class="nav-tabs">
+            <div class="nav-tab active" data-tab="executive">
+                <span class="tab-number">1</span>
+                Executive Summary
+            </div>
+            <div class="nav-tab" data-tab="stakeholders">
+                <span class="tab-number">2</span>
+                Stakeholder Analysis
+            </div>
+            <div class="nav-tab" data-tab="themes">
+                <span class="tab-number">3</span>
+                Core Themes
+            </div>
+            <div class="nav-tab" data-tab="vendor">
+                <span class="tab-number">4</span>
+                Vendor Considerations
+            </div>
+            <div class="nav-tab" data-tab="conclusion">
+                <span class="tab-number">5</span>
+                Conclusion
+            </div>
+        </div>
+
+        <!-- Executive Summary Section -->
+        <div id="executive" class="content-section active">
+            <div class="card">
+                <h2>Executive Summary</h2>
+                <p>Jackson Physician Search faces a critical challenge: a 20-person sales team operating without a repeatable, trackable sales process. Currently, reps call through territories A-Z every 90 days with no targeting strategy, no systematic nurturing, and inconsistent execution. Sales leadership describes forecasting meetings where managers simply "go around the room" asking how many contracts will close—with no data to support the answers.</p>
+                
+                <div class="highlight-box warning">
+                    <h3>🎯 Critical Decision Timeline</h3>
+                    <p>Budget approval for 2026 implementation (standard 4-6 week deployment)</p>
+                </div>
+
+                <h3>6 Critical Gaps Identified</h3>
+                
+                <div class="gap-list">
+                    <div class="gap-item">
+                        <strong>1. No Defined Sales Process or Cadence Structure</strong>
+                        <p>Reps call through territories A-Z every 90 days with no targeting strategy, no systematic nurturing, and inconsistent execution. Every call sounds the same with no strategy.</p>
+                    </div>
+                    
+                    <div class="gap-item">
+                        <strong>2. Manual Activity Logging Consuming Hours</strong>
+                        <p>Reps manually log activities "if they remember," consuming hours of productive selling time. This creates unreliable data and wastes valuable selling hours.</p>
+                    </div>
+                    
+                    <div class="gap-item">
+                        <strong>3. Zero Visibility into Rep Activity or Pipeline Health</strong>
+                        <p>Sales managers cannot identify what's actually in the pipeline vs. what's close to closing. Forecasting is based on "gut feel" with no data to support answers.</p>
+                    </div>
+                    
+                    <div class="gap-item">
+                        <strong>4. Sales Managers Cannot Identify Pipeline Status</strong>
+                        <p>It's close to impossible for sales leaders to know what reps are doing, what realistically is in the pipeline, whether opportunities are top of funnel or actually close to closing.</p>
+                    </div>
+                    
+                    <div class="gap-item">
+                        <strong>5. Marketing Campaigns Generate Engagement But Reps Don't Act</strong>
+                        <p>Marketing sends monthly emails to territories; reps receive open/click reports but "most of them probably don't" follow up. No way to prove marketing ROI.</p>
+                    </div>
+                    
+                    <div class="gap-item">
+                        <strong>6. Salesforce Sales Cadences Tool Provides No Email Tracking Visibility</strong>
+                        <p>Sales Cadences tool provides no email tracking visibility and low adoption. Reps are not using the processes that are in place, making data unreliable.</p>
+                    </div>
+                </div>
+
+                <h3>How Outreach Addresses Every Gap</h3>
+                <p>Outreach will systematize sales execution across 20+ reps, creating predictable revenue through automated cadences, intelligent prioritization, and complete visibility. With your sales team spending significant time identifying physician hiring needs, Outreach's AI agent can automatically detect hiring signals and trigger targeted outreach—freeing reps to focus on conversations instead of research.</p>
+
+                <div class="highlight-box">
+                    <h4>Expected Outcomes (Conservative Estimates)</h4>
+                    <ul>
+                        <li><strong>+25-40% increase in meetings booked</strong> through automated, multi-touch cadences</li>
+                        <li><strong>150+ hours/week reclaimed</strong> across the team (currently spent on manual logging and admin)</li>
+                        <li><strong>Accurate forecasting</strong> replacing "gut feel" approach</li>
+                        <li><strong>40+ additional qualified meetings monthly</strong> from systematic follow-up on marketing engagement</li>
+                    </ul>
+                </div>
+
+                <p>Jackson Physician Search has excellent reps who close deals effectively—but they're operating without the systematic support structure needed to scale predictably. The current "Wild West" approach leaves revenue on the table through inconsistent prospecting, invisible marketing ROI, unreliable forecasting, and wasted hours on manual admin work instead of customer conversations.</p>
+            </div>
+        </div>
+
+        <!-- Stakeholder Analysis Section -->
+        <div id="stakeholders" class="content-section">
+            <div class="card">
+                <h2>Stakeholder Analysis: Current State vs. Future State</h2>
+                <p>Key stakeholders across sales, marketing, and operations have identified critical gaps in the current sales execution process. Here's how Outreach addresses each stakeholder's primary concerns.</p>
+                
+                <div class="stakeholder-accordion">
+                    <!-- Stakeholder 1: Kristen Myers -->
+                    <div class="stakeholder-item">
+                        <div class="stakeholder-header" onclick="toggleStakeholder(this)">
+                            <div>
+                                <div class="stakeholder-title">Kristen Myers</div>
+                                <div class="stakeholder-role">VP of Marketing</div>
+                            </div>
+                            <span class="toggle-icon">+</span>
+                        </div>
+                        <div class="stakeholder-content">
+                            <h4>Role & Goals</h4>
+                            <p>Prove marketing ROI and ensure sales team executes on marketing campaigns systematically.</p>
+                            
+                            <h4>Current Process</h4>
+                            <p>Marketing sends monthly emails to territories; reps receive open/click reports but most don't follow up consistently. Two inbound leads per day split among 20 reps.</p>
+                            
+                            <h4>What's Breaking/Limiting</h4>
+                            <p>Sales team not executing on marketing campaigns; no way to prove marketing ROI. "We do not have well defined nor trackable process that our sales team uses in their outreach... every call kind of sounds the same and has no strategy."</p>
+                            
+                            <div class="state-comparison">
+                                <div class="state-box current">
+                                    <h4>❌ Current State</h4>
+                                    <p>Marketing campaigns generate engagement data, but reps don't act on it consistently. No attribution from marketing campaigns to revenue. No systematic execution of marketing-created content.</p>
+                                </div>
+                                
+                                <div class="state-box future">
+                                    <h4>✅ Future State with Outreach</h4>
+                                    <p>Direct attribution from marketing campaigns to revenue. Automated triggers enroll prospects into rep-specific sequences when they engage with marketing content. Systematic execution of marketing-created content. Data proving which campaigns drive results.</p>
+                                </div>
+                            </div>
+
+                            <div class="quote-box">
+                                "We do not have well defined nor trackable process that our sales team uses in their outreach. So you have some people that just literally will call through their territory A-Z once every 90 days. They'll only call one person. They have no idea if it's the right person."
+                                <span class="quote-author">— Kristen Myers</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Stakeholder 2: Alli Mclane -->
+                    <div class="stakeholder-item">
+                        <div class="stakeholder-header" onclick="toggleStakeholder(this)">
+                            <div>
+                                <div class="stakeholder-title">Alli Mclane</div>
+                                <div class="stakeholder-role">CRM Manager</div>
+                            </div>
+                            <span class="toggle-icon">+</span>
+                        </div>
+                        <div class="stakeholder-content">
+                            <h4>Role & Goals</h4>
+                            <p>Ensure data integrity and system adoption; ensure reps follow processes in Salesforce.</p>
+                            
+                            <h4>Current Process</h4>
+                            <p>Reps manually log activities "if they remember." Data in Salesforce can't be trusted. Reps are not using the processes that are in place.</p>
+                            
+                            <h4>What's Breaking/Limiting</h4>
+                            <p>Data integrity and system adoption issues. Reps not following processes in Salesforce. "They're not necessarily using the processes that are in place... I wouldn't take it to the bank whatever is in there."</p>
+                            
+                            <div class="state-comparison">
+                                <div class="state-box current">
+                                    <h4>❌ Current State</h4>
+                                    <p>Reps manually log activities inconsistently. Data in Salesforce is unreliable. Managers have no visibility into daily activity. Sales Cadences tool has low adoption and no email tracking visibility.</p>
+                                </div>
+                                
+                                <div class="state-box future">
+                                    <h4>✅ Future State with Outreach</h4>
+                                    <p>Bi-directional Salesforce sync eliminates manual entry. Automated activity capture creates trustworthy data. Streamlined workflows improve adoption. 100% automatic activity logging—every email, call, and meeting syncs to Salesforce without rep action.</p>
+                                </div>
+                            </div>
+
+                            <div class="quote-box">
+                                "They're not necessarily using the processes that are in place that Alley has created. So you can't, like I wouldn't go, I wouldn't take it to the bank whatever is in there."
+                                <span class="quote-author">— Kristen Myers (referencing Alli Mclane's work)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Stakeholder 3: Tanner Forbes -->
+                    <div class="stakeholder-item">
+                        <div class="stakeholder-header" onclick="toggleStakeholder(this)">
+                            <div>
+                                <div class="stakeholder-title">Tanner Forbes</div>
+                                <div class="stakeholder-role">Salesforce Admin</div>
+                            </div>
+                            <span class="toggle-icon">+</span>
+                        </div>
+                        <div class="stakeholder-content">
+                            <h4>Role & Goals</h4>
+                            <p>Ensure technical implementation and system integration work smoothly without complex managed packages.</p>
+                            
+                            <h4>Current Process</h4>
+                            <p>Sales Cadences tool "took a long time to implement" with "low engagement" and no visibility into email clicks.</p>
+                            
+                            <h4>What's Breaking/Limiting</h4>
+                            <p>Technical implementation challenges. Sales Cadences tool has low engagement and no email tracking visibility. Complex managed packages create maintenance overhead.</p>
+                            
+                            <div class="state-comparison">
+                                <div class="state-box current">
+                                    <h4>❌ Current State</h4>
+                                    <p>Sales Cadences tool took a long time to implement with low engagement. No visibility into email clicks. Complex managed packages require ongoing maintenance.</p>
+                                </div>
+                                
+                                <div class="state-box future">
+                                    <h4>✅ Future State with Outreach</h4>
+                                    <p>True native Salesforce integration with proven reliability. No complex managed packages. Configuration flexibility for your specific sales process. Single integration user; never requires re-authentication.</p>
+                                </div>
+                            </div>
+
+                            <div class="quote-box">
+                                "Sales Cadences tool took a long time to implement with low engagement and no visibility into email clicks."
+                                <span class="quote-author">— Context on current Salesforce tools</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Stakeholder 4: Sales Leadership -->
+                    <div class="stakeholder-item">
+                        <div class="stakeholder-header" onclick="toggleStakeholder(this)">
+                            <div>
+                                <div class="stakeholder-title">Sales Leadership</div>
+                                <div class="stakeholder-role">Helen, Ben - Sales Managers</div>
+                            </div>
+                            <span class="toggle-icon">+</span>
+                        </div>
+                        <div class="stakeholder-content">
+                            <h4>Role & Goals</h4>
+                            <p>Achieve predictable revenue and team performance visibility. Enable data-driven coaching and accurate forecasting.</p>
+                            
+                            <h4>Current Process</h4>
+                            <p>Forecasting meetings consist of managers asking "how many contracts are going to bring in?" with responses like "three"—no data, no visibility, no reliable forecast.</p>
+                            
+                            <h4>What's Breaking/Limiting</h4>
+                            <p>Forecasting is "going around the room" asking for gut feelings. Impossible to coach effectively without activity visibility. "It's close to impossible, but very, very challenging for their sales leaders to know what they're doing, what realistically is in the pipeline."</p>
+                            
+                            <div class="state-comparison">
+                                <div class="state-box current">
+                                    <h4>❌ Current State</h4>
+                                    <p>Forecasting meetings where managers simply "go around the room" asking how many contracts will close—with no data to support the answers. No visibility into rep activity or pipeline health. Impossible to identify what's actually in the pipeline vs. what's close to closing.</p>
+                                </div>
+                                
+                                <div class="state-box future">
+                                    <h4>✅ Future State with Outreach</h4>
+                                    <p>Real-time dashboard visibility into rep activity and pipeline health. Accurate forecasting with AI-powered insights. Deal Health scores analyze engagement patterns to predict deal risk. Data-driven coaching opportunities. Automated stale deal alerts when opportunities go 14+ days without activity.</p>
+                                </div>
+                            </div>
+
+                            <div class="quote-box">
+                                "It's close to impossible, but very, very challenging for their sales leaders to know what they're doing, what realistically is in the pipeline, whether or not it's still kind of like top of funnel and not even close to closing or it actually is really close to closing."
+                                <span class="quote-author">— Kristen Myers (on Sales Leadership challenges)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Core Themes Section -->
+        <div id="themes" class="content-section">
+            <div class="card">
+                <h2>Core Themes: Problems & Solutions</h2>
+                <p>Four critical workflows that Outreach transforms to create predictable revenue and systematic sales execution.</p>
+                
+                <div class="theme-boxes">
+                    <div class="theme-box active" data-theme="theme1">
+                        <h4>Prospecting & Territory Management</h4>
+                        <p>Systematic territory coverage with AI-powered hiring signal detection</p>
+                    </div>
+                    <div class="theme-box" data-theme="theme2">
+                        <h4>Marketing-to-Sales Handoff</h4>
+                        <p>Automated follow-up on marketing engagement with full attribution</p>
+                    </div>
+                    <div class="theme-box" data-theme="theme3">
+                        <h4>Pipeline Management & Forecasting</h4>
+                        <p>Data-driven forecasting with deal health monitoring</p>
+                    </div>
+                    <div class="theme-box" data-theme="theme4">
+                        <h4>Activity Capture & CRM Hygiene</h4>
+                        <p>100% automatic activity logging with bi-directional Salesforce sync</p>
+                    </div>
+                </div>
+
+                <div class="theme-content">
+                    <!-- Theme 1: Prospecting & Territory Management -->
+                    <div id="theme1-content" class="theme-detail active">
+                        <h3>Prospecting & Territory Management</h3>
+                        
+                        <h4>What Jackson Physician Search Needs</h4>
+                        <p>Reps need to spend time talking to qualified prospects with active physician hiring needs instead of cold calling entire territories hoping to "get lucky." Currently, reps call A-Z through territory lists once per 90 days, contacting one person per account with no research on whether it's the right contact or if there's an active need.</p>
+                        
+                        <h4>What Salesloft Can't Do</h4>
+                        <p>Salesloft's AI capabilities require third-party integrations to function. Features "flat out don't work" without additional vendor partnerships. The platform lacks autonomous lead identification and automated account research capabilities that would solve the hiring signal detection need.</p>
+                        
+                        <div class="quote-box">
+                            "Really, we just need to put some structure and systematize their outreach so that it's consistent, repeatable and targeted to their different segments."
+                            <span class="quote-author">— Kristen Myers</span>
+                        </div>
+                        
+                        <h4>How Outreach Solves It</h4>
+                        <p>Outreach's AI Research Agent automatically identifies accounts with active physician hiring needs by scanning job boards, career sites, and public postings. Automated cadences trigger when hiring signals are detected—no manual research required. Multi-channel sequences (email, call, LinkedIn) ensure consistent 8-12 touches over 30 days. Smart prioritization surfaces prospects based on engagement (email opens, clicks, reply sentiment).</p>
+                        
+                        <div class="solution-list">
+                            <div class="solution-item">
+                                <strong>AI Research Agent</strong>
+                                <p>Automatically scans job boards, career sites, and public postings to identify accounts with active physician hiring needs—eliminating hours of manual research per rep.</p>
+                            </div>
+                            <div class="solution-item">
+                                <strong>Automated Cadences</strong>
+                                <p>Multi-channel sequences (email, call, LinkedIn) ensure consistent 8-12 touches over 30 days, replacing the current A-Z territory calling approach.</p>
+                            </div>
+                            <div class="solution-item">
+                                <strong>Smart Prioritization</strong>
+                                <p>Surfaces prospects based on engagement (email opens, clicks, reply sentiment) so reps focus on qualified opportunities first.</p>
+                            </div>
+                        </div>
+                        
+                        <h4>Business Impact</h4>
+                        <div class="impact-metrics">
+                            <div class="impact-card">
+                                <div class="impact-icon">⏱️</div>
+                                <div class="impact-label">Hours saved per rep weekly on manual research</div>
+                            </div>
+                            <div class="impact-card">
+                                <div class="impact-icon">📈</div>
+                                <div class="impact-label">+25-40% increase in meetings booked through systematic outreach</div>
+                            </div>
+                            <div class="impact-card">
+                                <div class="impact-icon">✅</div>
+                                <div class="impact-label">Reps focus on qualified prospects with active needs instead of cold calling</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Theme 2: Marketing-to-Sales Handoff -->
+                    <div id="theme2-content" class="theme-detail">
+                        <h3>Marketing-to-Sales Handoff</h3>
+                        
+                        <h4>What Jackson Physician Search Needs</h4>
+                        <p>Every marketing dollar should generate systematic follow-up. High-intent prospects need immediate attention. Marketing needs direct attribution connecting campaigns to revenue. Currently, marketing sends monthly emails to territories; reps receive open/click reports but "most of them probably don't" follow up. Two inbound leads per day split among 20 reps.</p>
+                        
+                        <h4>What Salesloft Can't Do</h4>
+                        <p>Salesloft's reporting is unreliable—customers report "we don't trust Salesloft's reporting." The platform lacks comprehensive revenue attribution capabilities. Without trustworthy reporting, marketing cannot make data-driven budget allocation decisions or prove ROI.</p>
+                        
+                        <div class="quote-box">
+                            "The one thing they can see like they can see meetings, they can see where opportunities are. But again, like they're not necessarily using the processes that are in place that Alley has created. So you can't, like I wouldn't go, I wouldn't take it to the bank whatever is in there."
+                            <span class="quote-author">— Kristen Myers</span>
+                        </div>
+                        
+                        <h4>How Outreach Solves It</h4>
+                        <p>Automated triggers enroll prospects into rep-specific sequences when they engage with marketing content (email opens 3+, content downloads, website visits). Lead scoring with recency decay—recent engagement prioritized over old engagement. Urgent tasks auto-populate for high-intent signals (multiple email opens, pricing page visits). Marketing can push targeted lists directly into sales sequences with appropriate messaging.</p>
+                        
+                        <div class="solution-list">
+                            <div class="solution-item">
+                                <strong>Automated Engagement Triggers</strong>
+                                <p>Prospects automatically enroll into rep-specific sequences when they engage with marketing content (email opens 3+, content downloads, website visits).</p>
+                            </div>
+                            <div class="solution-item">
+                                <strong>Lead Scoring with Recency</strong>
+                                <p>Recent engagement prioritized over old engagement—solving current Pardot limitation where 2020 engagement looks identical to yesterday's engagement.</p>
+                            </div>
+                            <div class="solution-item">
+                                <strong>Full Attribution Reporting</strong>
+                                <p>Direct attribution from marketing campaigns to pipeline and revenue, enabling data-driven budget allocation and proving marketing ROI.</p>
+                            </div>
+                        </div>
+                        
+                        <h4>Business Impact</h4>
+                        <div class="impact-metrics">
+                            <div class="impact-card">
+                                <div class="impact-icon">⏱️</div>
+                                <div class="impact-label">40+ additional qualified meetings monthly from systematic follow-up</div>
+                            </div>
+                            <div class="impact-card">
+                                <div class="impact-icon">📈</div>
+                                <div class="impact-label">2-3× more marketing-influenced opportunities converted</div>
+                            </div>
+                            <div class="impact-card">
+                                <div class="impact-icon">✅</div>
+                                <div class="impact-label">Every marketing dollar generates systematic follow-up with full attribution</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Theme 3: Pipeline Management & Forecasting -->
+                    <div id="theme3-content" class="theme-detail">
+                        <h3>Pipeline Management & Forecasting</h3>
+                        
+                        <h4>What Jackson Physician Search Needs</h4>
+                        <p>Leadership needs accurate forecasts. Managers need to proactively coach on at-risk deals. Reps need to know exactly which deals need attention. Currently, sales meetings consist of managers asking "how many contracts are going to bring in?" with responses like "three"—no data, no visibility, no reliable forecast.</p>
+                        
+                        <h4>What Salesloft Can't Do</h4>
+                        <p>Salesloft customers report "forecasting is honestly really rudimentary." Teams resort to "triangulating between multiple data sources" because they "don't trust Salesloft's reporting." The platform lacks trusted forecasting capabilities with only 80% automation success rate.</p>
+                        
+                        <div class="quote-box">
+                            "It's close to impossible, but very, very challenging for their sales leaders to know what they're doing, what realistically is in the pipeline."
+                            <span class="quote-author">— Kristen Myers</span>
+                        </div>
+                        
+                        <h4>How Outreach Solves It</h4>
+                        <p>Deal Health scores analyze engagement patterns, stakeholder involvement, and activity recency to predict deal risk. Automated stale deal alerts when opportunities go 14+ days without activity. Pipeline reporting shows conversion rates by stage, rep, and sequence. AI-powered forecasting provides confidence scores based on historical patterns and current engagement.</p>
+                        
+                        <div class="solution-list">
+                            <div class="solution-item">
+                                <strong>Deal Health Monitoring</strong>
+                                <p>Analyzes engagement patterns, stakeholder involvement, and activity recency to predict deal risk and flag at-risk opportunities before they're lost.</p>
+                            </div>
+                            <div class="solution-item">
+                                <strong>AI-Powered Forecasting</strong>
+                                <p>Provides confidence scores based on historical patterns and current engagement. 98% accuracy in trusted forecasting replaces "gut feel" approach.</p>
+                            </div>
+                            <div class="solution-item">
+                                <strong>Pipeline Reporting</strong>
+                                <p>Shows conversion rates by stage, rep, and sequence. Real-time dashboard visibility replaces "going around the room" forecasting approach.</p>
+                            </div>
+                        </div>
+                        
+                        <h4>Business Impact</h4>
+                        <div class="impact-metrics">
+                            <div class="impact-card">
+                                <div class="impact-icon">⏱️</div>
+                                <div class="impact-label">Accurate forecasting replacing "gut feel" approach</div>
+                            </div>
+                            <div class="impact-card">
+                                <div class="impact-icon">📈</div>
+                                <div class="impact-label">98% forecasting accuracy with AI-powered insights</div>
+                            </div>
+                            <div class="impact-card">
+                                <div class="impact-icon">✅</div>
+                                <div class="impact-label">Managers can proactively coach on at-risk deals with data</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Theme 4: Activity Capture & CRM Hygiene -->
+                    <div id="theme4-content" class="theme-detail">
+                        <h3>Activity Capture & CRM Hygiene</h3>
+                        
+                        <h4>What Jackson Physician Search Needs</h4>
+                        <p>Complete, trustworthy activity data. 5-10 hours saved per rep weekly. Managers need real-time visibility into daily activity across the team. Currently, reps manually log activities "if they remember"; data in Salesforce can't be trusted; managers have no visibility into daily activity.</p>
+                        
+                        <h4>What Salesloft Can't Do</h4>
+                        <p>Salesloft's per-user authentication model means "if I get logged out of my CRM, that activity won't log." Data ownership corruption where "whichever person exports becomes the owner." This creates data integrity issues and manual reconnection work for admins. Einstein Activity Capture requires manual BCC when reps email from Outlook mobile or desktop.</p>
+                        
+                        <div class="quote-box">
+                            "Whenever I send stuff within my outlook, it does not sync into Gong... majority of times I'm going blind."
+                            <span class="quote-author">— Enterprise SaaS customer on competing platform</span>
+                        </div>
+                        
+                        <h4>How Outreach Solves It</h4>
+                        <p>100% automatic activity logging—every email, call, and meeting syncs to Salesforce without rep action. Works even when reps email from Outlook mobile or desktop (no manual BCC required). Meeting outcomes auto-populate (held, no-show, rescheduled). True bi-directional sync with one integration user (no per-rep authentication failures).</p>
+                        
+                        <div class="solution-list">
+                            <div class="solution-item">
+                                <strong>100% Automatic Activity Capture</strong>
+                                <p>Every email, call, and meeting syncs to Salesforce without rep action. Works even when reps email from Outlook mobile or desktop—no manual BCC required.</p>
+                            </div>
+                            <div class="solution-item">
+                                <strong>True Bi-Directional Sync</strong>
+                                <p>Single integration user; never requires re-authentication; maintains data ownership integrity. No per-rep authentication failures.</p>
+                            </div>
+                            <div class="solution-item">
+                                <strong>Complete Data Trust</strong>
+                                <p>Automated activity capture creates trustworthy data. Managers see real-time activity across the team. 150+ hours/week reclaimed across 20-rep team.</p>
+                            </div>
+                        </div>
+                        
+                        <h4>Business Impact</h4>
+                        <div class="impact-metrics">
+                            <div class="impact-card">
+                                <div class="impact-icon">⏱️</div>
+                                <div class="impact-label">150+ hours/week reclaimed (7.5 hours per rep weekly)</div>
+                            </div>
+                            <div class="impact-card">
+                                <div class="impact-icon">📈</div>
+                                <div class="impact-label">$187,500 annually in recovered selling time</div>
+                            </div>
+                            <div class="impact-card">
+                                <div class="impact-icon">✅</div>
+                                <div class="impact-label">Complete, trustworthy activity data with real-time visibility</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Vendor Considerations Section -->
+        <div id="vendor" class="content-section">
+            <div class="card">
+                <h2>Strategic Vendor Considerations</h2>
+                <p>Based on 100+ customer evaluations and head-to-head comparisons, here's why Outreach is the superior choice over Salesloft for Jackson Physician Search.</p>
+
+                <div class="highlight-box warning">
+                    <h3>1. Platform Maturity & Reliability</h3>
+                    <p><strong>Outreach:</strong> 10+ years focused on sales engagement; battle-tested at scale.</p>
+                    <p><strong>Salesloft:</strong> Recent ransomware attack caused complete Salesforce sync outage with no ETA for resolution. When integration fails, reps lose all activity tracking and go blind on customer interactions. "There was a huge, huge ransomware. Salesforce shut off the connection to Salesloft for two weeks." - Henry Krass</p>
+                </div>
+
+                <div class="highlight-box warning">
+                    <h3>2. True Bi-Directional Salesforce Integration</h3>
+                    <p><strong>Outreach:</strong> Single integration user; never requires re-authentication; maintains data ownership integrity.</p>
+                    <p><strong>Salesloft:</strong> Per-user authentication model means "if I get logged out of my CRM, that activity won't log"; data ownership corruption where "whichever person exports becomes the owner." This creates data integrity issues and manual reconnection work for admins.</p>
+                </div>
+
+                <div class="highlight-box warning">
+                    <h3>3. Automation Reliability</h3>
+                    <p><strong>Outreach:</strong> Parallel processing with sophisticated branching; 94% automation success rate.</p>
+                    <p><strong>Salesloft:</strong> Sequential processing architecture means "if Salesforce doesn't update quick enough, the automation starts to slow down and fail"; 80% automation failure rate. Salesloft customers report "all the automation we've attempted to build has technical issues... we only have one automated because the other four we cannot stand up accurately."</p>
+                </div>
+
+                <div class="highlight-box success">
+                    <h3>How This Contrasts with Outreach's Position</h3>
+                    <p>Outreach's $200M investment from Salesforce recognizes superior architecture and deep native integration. This strategic partnership ensures long-term integration excellence and product alignment. Outreach's 10+ years of focus on sales engagement, combined with 94% automation success rate and trusted forecasting (98% accuracy), provides the reliability Jackson Physician Search needs to scale predictably.</p>
+                </div>
+
+                <h3>Why Salesloft Can't Solve These Problems</h3>
+                <p>Salesloft's architectural limitations, strategic deprioritization, and vendor model misalignment prevent it from solving Jackson Physician Search's critical challenges around systematic sales execution, data integrity, and reliable automation.</p>
+
+                <h4>Architectural Limitations</h4>
+                <ul>
+                    <li><strong>Sequential Processing:</strong> Automation fails when Salesforce doesn't update quickly enough, resulting in 80% automation failure rate vs. Outreach's 94% success rate</li>
+                    <li><strong>Per-User Authentication:</strong> Creates data integrity issues and manual reconnection work when users get logged out</li>
+                    <li><strong>100-Record Pagination Limits:</strong> "Death by a thousand clicks" wastes 30-45 minutes daily on basic workflow tasks</li>
+                </ul>
+
+                <h4>Strategic Deprioritization</h4>
+                <ul>
+                    <li><strong>AI Capabilities Require Third-Party Integrations:</strong> Rhythm requires third-party integrations to function; features "flat out don't work" without additional vendor partnerships</li>
+                    <li><strong>Rudimentary Forecasting:</strong> Customers report "forecasting is honestly really rudimentary" and teams resort to "triangulating between multiple data sources"</li>
+                    <li><strong>Broken Search Functionality:</strong> No bulk operations and broken search functionality create productivity drain</li>
+                </ul>
+
+                <h4>Vendor Model Misalignment</h4>
+                <ul>
+                    <li><strong>Standard ISV Relationship:</strong> No strategic partnership with Salesforce, unlike Outreach's $200M investment recognition</li>
+                    <li><strong>Reliability Issues:</strong> Recent ransomware attack caused complete Salesforce sync outage with no ETA for resolution, demonstrating platform instability</li>
+                </ul>
+
+                <div class="quote-box">
+                    "I always found that the call quality on Outreach was much better... a lot more dropped calls and disconnects with Salesloft than we ever had with Outreach."
+                    <span class="quote-author">— Sales Leader, Enterprise Technology Company</span>
+                </div>
+
+                <div class="highlight-box">
+                    <h4>Customer Impact: Real-World Evidence</h4>
+                    <p>One customer saw <strong>40% drop in meetings booked</strong> after switching from Outreach to Salesloft. Salesloft users report 30-45 minutes daily wasted on basic workflow tasks due to "death by a thousand clicks" interface limitations. The platform's reliability issues and data integrity problems create ongoing operational overhead that Outreach eliminates through superior architecture and integration.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Conclusion Section -->
+        <div id="conclusion" class="content-section">
+            <div class="card">
+                <h2>Conclusion: The Path Forward</h2>
+                <p>Jackson Physician Search has excellent reps who close deals effectively—but they're operating without the systematic support structure needed to scale predictably. The current "Wild West" approach leaves revenue on the table through inconsistent prospecting, invisible marketing ROI, unreliable forecasting, and wasted hours on manual admin work instead of customer conversations.</p>
+
+                <h3>The Evidence is Compelling</h3>
+                
+                <div class="highlight-box">
+                    <h4>Your Team's Direct Feedback</h4>
+                    <div class="quote-box">
+                        "We do not have well defined nor trackable process that our sales team uses in their outreach. So you have some people that just literally will call through their territory A-Z once every 90 days. They'll only call one person. They have no idea if it's the right person."
+                        <span class="quote-author">— Kristen Myers</span>
+                    </div>
+                    <div class="quote-box">
+                        "It's close to impossible, but very, very challenging for their sales leaders to know what they're doing, what realistically is in the pipeline."
+                        <span class="quote-author">— Kristen Myers</span>
+                    </div>
+                    <div class="quote-box">
+                        "They do a great job. They're all really good at what they do, but we feel like if we could put some structure in place and systematize some things... we don't even know what the possibilities are."
+                        <span class="quote-author">— Kristen Myers</span>
+                    </div>
+                </div>
+
+                <h3>Problems Documented</h3>
+                <ol>
+                    <li><strong>No defined sales process or cadence structure</strong> - Reps call A-Z through territories with no targeting strategy</li>
+                    <li><strong>Manual activity logging consuming hours</strong> - Reps manually log activities "if they remember," wasting productive selling time</li>
+                    <li><strong>Zero visibility into rep activity or pipeline health</strong> - Managers cannot identify what's in pipeline vs. close to closing</li>
+                    <li><strong>Marketing campaigns generate engagement but reps don't act</strong> - No way to prove marketing ROI or systematic follow-up</li>
+                    <li><strong>Salesforce Sales Cadences tool provides no email tracking</strong> - Low adoption and no visibility into email clicks</li>
+                    <li><strong>Forecasting based on "gut feel"</strong> - Managers "go around the room" asking for estimates with no data to support answers</li>
+                </ol>
+
+                <h3>The Strategic Decision</h3>
+                <p>Outreach transforms this by creating a repeatable, scalable sales execution system that systematically works territories with multi-touch cadences tailored to buyer personas, automatically triggers follow-up when prospects engage with marketing, provides real-time visibility into rep activity and pipeline health, and reclaims 150+ hours weekly for actual selling conversations.</p>
+
+                <div class="highlight-box success">
+                    <h3>✅ Positioning for Growth</h3>
+                    <p>For a $40-50k investment, Jackson Physician Search gains $187K+ in reclaimed productivity, 1,080+ additional meetings annually, and the systematic foundation to predictably scale revenue through 2026 and beyond. With sales teams spending hours researching which accounts are actively hiring physicians, Outreach's AI agent can automate this entirely—scanning job boards, identifying hiring signals, and automatically triggering targeted outreach. This shifts budget from expensive Google Ads hoping prospects raise their hands to proactive outreach reaching decision-makers exactly when they need your services.</p>
+                </div>
+
+                <h3>Implementation Path</h3>
+                <p><strong>Context:</strong> 20-person sales team; Salesforce + Pardot + RingCentral; standard deployment</p>
+                <ul>
+                    <li><strong>Week 1-2:</strong> Discovery & Configuration - Workflow interviews with sales, marketing, and RevOps teams; Salesforce integration setup and field mapping; RingCentral integration configuration; User provisioning and access setup</li>
+                    <li><strong>Week 2-4:</strong> Content & Automation Build - Migrate existing sequences to Outreach with improvements; Build marketing-to-sales automation triggers; Configure lead scoring and prioritization rules; Set up reporting dashboards for managers</li>
+                    <li><strong>Week 4-6:</strong> Training & Rollout - Rep training sessions (2 hours per role); Manager training on coaching workflows; Admin training for marketing and RevOps; Soft launch with pilot group, then full deployment</li>
+                </ul>
+                <p><strong>By Week 6:</strong> Your team will be executing systematic outreach, automatically capturing activities, and leveraging hiring signal detection—solving current challenges around "who to call, when to call, and how to nurture them."</p>
+                <p><strong>Note:</strong> Outreach does not offer pilots or trials. Implementation is full deployment with phased adoption approach to ensure team readiness.</p>
+
+                <div class="highlight-box">
+                    <h3 style="text-align: center; font-size: 24px; margin-bottom: 10px;">The Path Forward is Clear</h3>
+                    <p style="text-align: center; font-size: 18px; margin: 0;">Your reps are ready. Your leadership is ready. The question isn't whether to implement a sales engagement platform—it's whether to choose the mature, reliable platform that customers trust (Outreach) or the competitor that customers leave due to reliability issues, data integrity problems, and productivity drain (Salesloft).</p>
+                </div>
+
+                <h3>Return on Investment</h3>
+                <div class="highlight-box">
+                    <h4>Conservative ROI Calculation</h4>
+                    <p><strong>Scenario 1: Productivity Recovery Alone</strong></p>
+                    <ul>
+                        <li>150 hours/week reclaimed = 7.5 hours per rep weekly</li>
+                        <li>20 reps × 7.5 hours × 50 weeks = 3,750 hours annually</li>
+                        <li>At $50/hour = $187,500 in recovered selling time</li>
+                        <li><strong>ROI: 400-500% on productivity alone</strong></li>
+                    </ul>
+                    <p><strong>Scenario 2: Meeting Generation</strong></p>
+                    <ul>
+                        <li>Current state: ~300 meetings/month (estimate based on team size)</li>
+                        <li>+30% improvement = +90 meetings/month = 1,080 additional meetings annually</li>
+                        <li>At 15% close rate × $25K average deal = $4.05M additional pipeline annually</li>
+                        <li>At 30% win rate = $1.21M additional revenue</li>
+                    </ul>
+                    <p><strong>Payback Period:</strong> Based on productivity gains alone: Less than 2 months</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab Navigation
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabs = document.querySelectorAll('.nav-tab');
+            const sections = document.querySelectorAll('.content-section');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const targetTab = this.getAttribute('data-tab');
+                    
+                    tabs.forEach(t => t.classList.remove('active'));
+                    sections.forEach(s => s.classList.remove('active'));
+                    
+                    this.classList.add('active');
+                    document.getElementById(targetTab).classList.add('active');
+                });
+            });
+
+            // Theme Boxes
+            const themeBoxes = document.querySelectorAll('.theme-box');
+            const themeDetails = document.querySelectorAll('.theme-detail');
+
+            themeBoxes.forEach(box => {
+                box.addEventListener('click', function() {
+                    const theme = this.getAttribute('data-theme');
+                    
+                    themeBoxes.forEach(b => b.classList.remove('active'));
+                    themeDetails.forEach(d => d.classList.remove('active'));
+                    
+                    this.classList.add('active');
+                    document.getElementById(theme + '-content').classList.add('active');
+                });
+            });
+
+            // Stakeholder Accordion
+            window.toggleStakeholder = function(header) {
+                const content = header.nextElementSibling;
+                const icon = header.querySelector('.toggle-icon');
+                
+                if (content.classList.contains('active')) {
+                    content.classList.remove('active');
+                    icon.textContent = '+';
+                    header.classList.remove('active');
+                } else {
+                    document.querySelectorAll('.stakeholder-content.active').forEach(item => {
+                        item.classList.remove('active');
+                        item.previousElementSibling.classList.remove('active');
+                        item.previousElementSibling.querySelector('.toggle-icon').textContent = '+';
+                    });
+                    
+                    content.classList.add('active');
+                    icon.textContent = '-';
+                    header.classList.add('active');
+                }
+            };
+        });
+    </script>
+</body>
+</html>
+
